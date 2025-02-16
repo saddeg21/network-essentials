@@ -1,0 +1,37 @@
+In MAC and LINUX -> Berkeley Sockets (also called POSIX or UNIX sockets)
+In WINDOWS -> WINSOCK is being used
+
+## WINSOCK ##
+Winsock expects you to initialize it before use it and also requires a cleanup function. These are not used in Berkeley sockets.
+
+## UDP vs TCP ##
+UDP is connectionless and is being used in DNS.
+TCP doesnt work with broadcast or multicast
+
+## TCP PROGRAM FLOW ##
+getaddrinfo() is being used to get the ip address of website via using domain name
+struct addrinfo is being used to store it.
+
+Then socket() being created and bind() is being called to make socket bounded to the
+listening specific port and IP
+
+then listen() being called. Now it is listening for request
+
+The server can then call accept(), which will wait until a request is being made. If
+there is a request being made, then new socket being created and old one stays alive,too
+
+New socket handles two thing.
+send() -> used to send data
+recv() -> used to get data from client
+
+Old socket is still listening for new request
+
+## UDP PROGRAM FLOW ##
+UDP client must know address of server to send first request. Then getaddrinfo() is
+being called.
+
+After socket is being created client can use sendto() and recvfrom()
+It is different from TCP because there is no handshake, but client must use sendto()
+function.
+
+
