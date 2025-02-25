@@ -1,0 +1,25 @@
+## FOR socket_listen, WHY a new socket is being created for accept function?
+Because it is a listening function, so for handling the connection we use accept function.
+
+## BLOCKING ON SEND()
+When we call it, it copies ongoing data to a outgoing buffer provided by OS. If it is full, then it blocks. Sometimes instead of blocking, it returns how many bytes were actually copied. One example to this is that if program is on blocking send() and gets a signal from OS. In those situation, it is up to caller to try again with any remaining data.
+
+In a real world app, we need to compare result of send() with number of bytes we want to send. It is hard to handle when we handle multiple sockets.
+
+So say buffer contains buffer_len bytes of data to send over a socket called peer_socket. This blocks until we send all of buffer.
+
+int begin = 0;
+while (begin<buffer_len) {
+	int sent  = send(peer_socket, buffer + begin, buffer_len - begin, 0);
+	if(sent == -1) {
+		// Handle error
+	}
+	begin += sent;
+}
+
+If we manage multiple sockets and dont want them to get into pending, put all of them into an fd_set, and pass it as a third param to select()
+
+## TCP IS A STREAM PROTOCOL
+So lets say send() sends 20 byte at once. There is no guarentee recv() takes 20 at once, too. It could be 5 and 15. To prevent errors, we use buffers and dont process data until buffer is full.
+
+But UDP is not a STREAM protocol so if data is being sent as 20 byte at once, it is being taken as 20 byte at once, too.

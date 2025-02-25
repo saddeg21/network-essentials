@@ -1,0 +1,10 @@
+## UDP CLIENT FUNCTIONS
+
+sendto() instead of send() and connect()
+connect() in UDP only stores an address locally so it makes a socket associated with a
+remote address
+
+We can either use connect(), send() and recv() or sendto() and recvfrom()
+
+When we use connect(), we return data from basically a local address. When using recvfrom() it returns any incoming data from any peer
+Unless we call bind(), our local address and port is assigned automatically by OS
